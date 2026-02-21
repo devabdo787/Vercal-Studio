@@ -27,17 +27,18 @@
         
         <br><br>
         <button onclick="window.location.href='index.html'" style="background:#333;">العودة للمتجر</button>
+        <p style="font-size: 12px; color: #555; margin-top: 10px;">بمجرد دخولك هنا، ستظهر لك أزرار الحذف (X) في صفحة المتجر.</p>
     </div>
 
     <script src="script.js"></script>
     <script>
-        // حماية إضافية: أول ما يفتح الصفحة يسأله عن الباسورد
-        window.onload = function() {
-            let p = prompt("كلمة مرور الإدارة المطلوبة للدخول:");
-            if(p !== "VERCAL2026") {
-                alert("غير مسموح لك بالدخول");
-                window.location.href = "index.html";
-            }
+        // حماية برمجية عند الدخول
+        let p = prompt("كلمة مرور الإدارة:");
+        if(p === "VERCAL2026") {
+            sessionStorage.setItem('isAdmin', 'true');
+        } else {
+            alert("غير مسموح لك بالدخول");
+            window.location.href = "index.html";
         }
     </script>
 </body>
