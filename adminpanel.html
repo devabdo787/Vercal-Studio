@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>لوحة تحكم Vercal Studio</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body style="background: #000; color: #fff; padding: 50px 5%;">
+
+    <div class="admin-box">
+        <h2 style="text-align:center; margin-bottom:30px;">لوحة الإدارة السرية</h2>
+        
+        <h3>إضافة منتج جديد</h3>
+        <input type="text" id="p-img" placeholder="رابط صورة المنتج">
+        <input type="text" id="p-name" placeholder="اسم المنتج">
+        <textarea id="p-desc" placeholder="وصف المنتج"></textarea>
+        <input type="number" id="p-price" placeholder="السعر">
+        <button onclick="addProduct()">نشر في المتجر</button>
+        
+        <hr style="margin:30px 0; border:0; border-top:1px solid #222;">
+        
+        <h3>إضافة كود خصم</h3>
+        <input type="text" id="c-code" placeholder="رمز الكود">
+        <input type="number" id="c-pct" placeholder="نسبة الخصم">
+        <button onclick="addCoupon()">تفعيل الكود</button>
+        
+        <br><br>
+        <button onclick="window.location.href='index.html'" style="background:#333;">العودة للمتجر</button>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // حماية إضافية: أول ما يفتح الصفحة يسأله عن الباسورد
+        window.onload = function() {
+            let p = prompt("كلمة مرور الإدارة المطلوبة للدخول:");
+            if(p !== "VERCAL2026") {
+                alert("غير مسموح لك بالدخول");
+                window.location.href = "index.html";
+            }
+        }
+    </script>
+</body>
+</html>
