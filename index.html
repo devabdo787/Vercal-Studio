@@ -14,7 +14,7 @@
         <div class="nav-links">
             <a href="#" onclick="showSection('home')">الرئيسية</a>
             <a href="#" onclick="showSection('store')">المتجر</a>
-            <a href="#" onclick="checkAdmin()">الإدارة</a>
+            <a href="adminpanel.html">الإدارة</a>
         </div>
         <div class="brand">VERCAL STUDIO</div>
     </nav>
@@ -37,23 +37,10 @@
         <div id="product-list" class="grid"></div>
     </section>
 
-    <section id="admin" class="section">
-        <div class="admin-box">
-            <h2 class="title">لوحة تحكم المالك</h2>
-            <h3>إضافة منتج جديد</h3>
-            <input type="text" id="p-img" placeholder="رابط صورة المنتج">
-            <input type="text" id="p-name" placeholder="اسم المنتج">
-            <textarea id="p-desc" placeholder="وصف المنتج"></textarea>
-            <input type="number" id="p-price" placeholder="السعر">
-            <button onclick="addProduct()">نشر في المتجر</button>
-            <hr style="margin:30px 0; border:0; border-top:1px solid #222;">
-            <h3>إضافة كود خصم</h3>
-            <input type="text" id="c-code" placeholder="رمز الكود">
-            <input type="number" id="c-pct" placeholder="نسبة الخصم">
-            <button onclick="addCoupon()">تفعيل الكود</button>
-        </div>
-    </section>
-
     <script src="script.js"></script>
+    <script>
+        // تشغيل العرض فور فتح الصفحة
+        window.onload = () => render();
+    </script>
 </body>
 </html>
