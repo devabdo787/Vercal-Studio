@@ -2,43 +2,29 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>لوحة تحكم Vercal Studio</title>
+    <title>Vercal Admin | Discord Login</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
 </head>
-<body style="background: #000; color: #fff; padding: 50px 5%;">
+<body style="background: #000; color: #fff; display: flex; align-items: center; justify-content: center; height: 100vh;">
 
-    <div class="admin-box">
-        <h2 style="text-align:center; margin-bottom:30px;">لوحة الإدارة السرية</h2>
-        
-        <h3>إضافة منتج جديد</h3>
-        <input type="text" id="p-img" placeholder="رابط صورة المنتج">
-        <input type="text" id="p-name" placeholder="اسم المنتج">
-        <textarea id="p-desc" placeholder="وصف المنتج"></textarea>
-        <input type="number" id="p-price" placeholder="السعر">
-        <button onclick="addProduct()">نشر في المتجر</button>
-        
-        <hr style="margin:30px 0; border:0; border-top:1px solid #222;">
-        
-        <h3>إضافة كود خصم</h3>
-        <input type="text" id="c-code" placeholder="رمز الكود">
-        <input type="number" id="c-pct" placeholder="نسبة الخصم">
-        <button onclick="addCoupon()">تفعيل الكود</button>
-        
-        <br><br>
-        <button onclick="window.location.href='index.html'" style="background:#333;">العودة للمتجر</button>
-        <p style="font-size: 12px; color: #555; margin-top: 10px;">بمجرد دخولك هنا، ستظهر لك أزرار الحذف (X) في صفحة المتجر.</p>
+    <div id="login-section" class="admin-box" style="text-align: center;">
+        <h2>منطقة الإدارة المحمية</h2>
+        <p>يجب تسجيل الدخول عبر ديسكورد للتحقق من صلاحياتك</p>
+        <br>
+        <a href="https://discord.com/api/oauth2/authorize?client_id=YOUR_CLIENT_ID&redirect_uri=YOUR_REDIRECT_URL&response_type=code&scope=identify%20guilds.members.read" 
+           class="btn-discord" style="justify-content: center;">
+            <i class="fab fa-discord"></i> تسجيل الدخول بالديسكورد
+        </a>
     </div>
 
-    <script src="script.js"></script>
+    <div id="admin-content" style="display: none; width: 90%;">
+        </div>
+
     <script>
-        // حماية برمجية عند الدخول
-        let p = prompt("كلمة مرور الإدارة:");
-        if(p === "VERCAL2026") {
-            sessionStorage.setItem('isAdmin', 'true');
-        } else {
-            alert("غير مسموح لك بالدخول");
-            window.location.href = "index.html";
+        // فحص بسيط للجلسة عند التحميل
+        if(sessionStorage.getItem('isAuthorized') === 'true') {
+            document.getElementById('login-section').style.display = 'none';
+            document.getElementById('admin-content').style.display = 'block';
         }
     </script>
 </body>
