@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vercal Studio | Store</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-links">
+            <a href="#" onclick="showSection('home')">الرئيسية</a>
+            <a href="#" onclick="showSection('store')">المتجر</a>
+            <a href="#" onclick="checkAdmin()">الإدارة</a>
+        </div>
+        <div class="brand">VERCAL STUDIO</div>
+    </nav>
+
+    <section id="home" class="section active">
+        <div class="hero">
+            <h1>VERCAL STUDIO</h1>
+            <p>نصنع لك التجربة البرمجية التي تستحقها</p>
+            <div class="hero-btns">
+                <button class="btn-main" onclick="showSection('store')">تصفح المنتجات</button>
+                <a href="https://discord.gg/3tDGtJNSKE" target="_blank" class="btn-discord">
+                    <i class="fab fa-discord"></i> انضم إلينا الآن
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="store" class="section">
+        <h2 class="title">المتجر الحصري</h2>
+        <div id="product-list" class="grid"></div>
+    </section>
+
+    <section id="admin" class="section">
+        <div class="admin-box">
+            <h2 class="title">لوحة تحكم المالك</h2>
+            <h3>إضافة منتج جديد</h3>
+            <input type="text" id="p-img" placeholder="رابط صورة المنتج">
+            <input type="text" id="p-name" placeholder="اسم المنتج">
+            <textarea id="p-desc" placeholder="وصف المنتج"></textarea>
+            <input type="number" id="p-price" placeholder="السعر">
+            <button onclick="addProduct()">نشر في المتجر</button>
+            <hr style="margin:30px 0; border:0; border-top:1px solid #222;">
+            <h3>إضافة كود خصم</h3>
+            <input type="text" id="c-code" placeholder="رمز الكود">
+            <input type="number" id="c-pct" placeholder="نسبة الخصم">
+            <button onclick="addCoupon()">تفعيل الكود</button>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>
