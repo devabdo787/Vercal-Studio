@@ -10,10 +10,11 @@ function addProduct() {
     const desc = document.getElementById('p-desc')?.value;
     const img = document.getElementById('p-img')?.value;
 
-    if (!name || !price) return alert("البيانات ناقصة!");
+    if (!name || !price) return alert("يرجى إدخال الاسم والسعر!");
 
     products.push({ id: Date.now(), name, price, method, desc, img });
     save();
+    alert("✅ تم نشر المنتج بنجاح!");
     location.reload();
 }
 
@@ -24,7 +25,7 @@ function render() {
     list.innerHTML = products.map((p, i) => `
         <div class="card">
             ${isAdmin ? `<button class="delete-btn" onclick="deleteProduct(${i})">×</button>` : ''}
-            <img src="${p.img || ''}">
+            <img src="${p.img || ''}" onerror="this.src='https://via.placeholder.com/300'">
             <div class="card-content">
                 <h3>${p.name}</h3>
                 <p>${p.desc}</p>
@@ -37,6 +38,10 @@ function render() {
 }
 
 function deleteProduct(i) {
-    if(confirm("حذف؟")) { products.splice(i, 1); save(); render(); }
+    if(confirm("هل تريد حذف هذا المنتج؟")) {
+        products.splice(i, 1);
+        save();
+        render();
+    }
 }
 window.onload = render;
