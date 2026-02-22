@@ -2,16 +2,14 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Vercal Admin | Secure Login</title>
+    <title>Vercal Admin | إدارة المنتجات</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body style="background: #000; color: #fff; display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px;">
 
     <div id="login-section" class="admin-box" style="text-align: center; max-width: 400px;">
-        <h2 style="margin-bottom: 20px;">لوحة الإدارة المحمية</h2>
-        <p style="color: #888; margin-bottom: 30px;">يجب تسجيل الدخول عبر ديسكورد للتحقق من رتبة الإدارة في سيرفر Vercal Studio.</p>
-        
+        <h2 style="margin-bottom: 20px;">لوحة الإدارة</h2>
         <a href="https://discord.com/oauth2/authorize?client_id=1474893422845231177&response_type=code&redirect_uri=https%3A%2F%2Fvercal-studio.vercel.app%2Fapi%2Fauth&scope=identify+guilds.members.read" 
            class="btn-discord" style="text-decoration: none; display: flex; justify-content: center; background: #5865F2; padding: 15px; border-radius: 5px; font-weight: bold; color: white;">
             تسجيل الدخول بالديسكورد
@@ -20,29 +18,34 @@
 
     <div id="admin-content" class="admin-box" style="display: none; width: 100%; max-width: 600px;">
         <h2 style="text-align:center; margin-bottom:30px;">لوحة الإدارة السرية</h2>
+        
         <h3>إضافة منتج جديد</h3>
         <input type="text" id="p-img" placeholder="رابط صورة المنتج">
         <input type="text" id="p-name" placeholder="اسم المنتج">
         <textarea id="p-desc" placeholder="وصف المنتج"></textarea>
-        <input type="number" id="p-price" placeholder="السعر">
+        <input type="text" id="p-price" placeholder="السعر (مثلاً: 50 أو 10.5)">
+        <input type="text" id="p-method" placeholder="وسيلة الدفع أو العملة (مثلاً: Credit أو USD)">
+        
         <button onclick="addProduct()">نشر في المتجر</button>
+        
         <hr style="margin:30px 0; border:0; border-top:1px solid #222;">
+        
         <h3>إضافة كود خصم</h3>
         <input type="text" id="c-code" placeholder="رمز الكود">
-        <input type="number" id="c-pct" placeholder="نسبة الخصم">
+        <input type="number" id="c-pct" placeholder="نسبة الخصم %">
         <button onclick="addCoupon()">تفعيل الكود</button>
+        
         <br><br>
         <button onclick="window.location.href='index.html'" style="background:#333;">العودة للمتجر</button>
     </div>
 
     <script src="script.js"></script>
     <script>
-        // التحقق مما إذا كان السيرفر قد أعطى الضوء الأخضر للدخول
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.get('auth') === 'success') {
             document.getElementById('login-section').style.display = 'none';
             document.getElementById('admin-content').style.display = 'block';
-            sessionStorage.setItem('isAdmin', 'true'); // تفعيل أزرار الحذف في المتجر
+            sessionStorage.setItem('isAdmin', 'true');
         }
     </script>
 </body>
