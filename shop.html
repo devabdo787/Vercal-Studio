@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>Vercal Studio | المتجر</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; padding: 40px 20px; max-width: 1200px; margin: 0 auto; }
+        .card { background: #111; border: 1px solid #222; border-radius: 15px; overflow: hidden; position: relative; transition: 0.3s; }
+        .card:hover { transform: translateY(-10px); border-color: #5865F2; }
+        .card img { width: 100%; height: 200px; object-fit: cover; }
+        .card-content { padding: 20px; }
+        .price-tag { margin: 15px 0; font-size: 1.2rem; font-weight: bold; color: #00ff00; }
+        .old-price { color: #ff4d4d; text-decoration: line-through; font-size: 0.9rem; margin-left: 10px; opacity: 0.6; }
+        .delete-btn { position: absolute; top: 10px; right: 10px; background: rgba(255,0,0,0.8); color: #fff; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-weight: bold; }
+        .btn-buy { display: block; background: #5865F2; color: #fff; text-align: center; padding: 10px; border-radius: 5px; text-decoration: none; margin-top: 10px; font-weight: bold; }
+        .btn-coupon { background: #333; color: #fff; border: none; padding: 10px; border-radius: 5px; cursor: pointer; width: 100%; margin-top: 5px; }
+    </style>
+</head>
+<body style="background: #000; color: #fff; font-family: 'Cairo', sans-serif; margin: 0;">
+
+    <header style="background: #0a0a0a; padding: 20px; border-bottom: 1px solid #222;">
+        <nav style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between;">
+            <div style="font-size: 1.5rem; font-weight: bold; color: #5865F2;">Vercal Studio</div>
+            <ul style="list-style: none; display: flex; gap: 20px; margin: 0;">
+                <li><a href="index.html" style="color: #fff; text-decoration: none;">الرئيسية</a></li>
+                <li><a href="shop.html" style="color: #5865F2; text-decoration: none; font-weight: bold;">المتجر</a></li>
+                <li><a href="adminpanel.html" style="color: #fff; text-decoration: none;">الإدارة</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div style="padding: 50px 20px; text-align: center;">
+        <h1 style="font-size: 2.5rem; color: #fff;">📦 جميع المنتجات</h1>
+        <p style="color: #aaa;">اختر المنتج المناسب لك وسنتواصل معك فوراً</p>
+    </div>
+
+    <div id="product-list" class="product-grid">
+        </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
