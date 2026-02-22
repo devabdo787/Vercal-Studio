@@ -1,18 +1,17 @@
-// استعادة البيانات أو إنشاء مصفوفة فارغة
+// بيانات الموقع
 let products = JSON.parse(localStorage.getItem('v_products')) || [];
 let coupons = JSON.parse(localStorage.getItem('v_coupons')) || {};
 let usedCoupons = JSON.parse(localStorage.getItem('v_used')) || {}; 
-
 let isAdmin = sessionStorage.getItem('isAdmin') === 'true';
 
-// دالة الحفظ
+// حفظ البيانات
 function save() {
     localStorage.setItem('v_products', JSON.stringify(products));
     localStorage.setItem('v_coupons', JSON.stringify(coupons));
     localStorage.setItem('v_used', JSON.stringify(usedCoupons));
 }
 
-// دالة إضافة منتج (محدثة وسليمة)
+// إضافة منتج
 function addProduct() {
     const name = document.getElementById('p-name').value;
     const priceInput = document.getElementById('p-price').value;
@@ -20,35 +19,33 @@ function addProduct() {
     const desc = document.getElementById('p-desc').value;
     const img = document.getElementById('p-img').value;
 
-    if(!name || !priceInput) return alert("يرجى إدخال اسم المنتج والسعر!");
+    if(!name || !priceInput) return alert("يرجى إدخال البيانات الأساسية!");
 
-    const id = Date.now();
     const price = parseFloat(priceInput);
-
     products.push({ 
-        id, name, price, method, desc, img, 
+        id: Date.now(), 
+        name, price, method, desc, img, 
         currentPrice: price, 
         hasDiscount: false 
     });
     
     save();
-    alert("✅ تم النشر!");
+    alert("✅ تم إضافة المنتج!");
     location.reload(); 
 }
 
-// دالة العرض (الرسم) - محمية من الأخطاء
+// عرض المنتجات في الصفحة
 function render() {
     const list = document.getElementById('product-list');
-    if(!list) return; // حماية لو مش في صفحة المتجر
+    if(!list) return;
 
     if (products.length === 0) {
-        list.innerHTML = "<p style='text-align:center; width:100%; padding:20px;'>لا يوجد منتجات حالياً..</p>";
+        list.innerHTML = "<p style='text-align:center; width:100%; color:#888;'>المتجر فارغ حالياً..</p>";
         return;
     }
 
     list.innerHTML = products.map((p, i) => {
-        // حماية: لو المنتج قديم ومفهوش method
-        const pMethod = p.method || ""; 
+        const pMethod = p.method || ""; // حماية لو المنتج قديم
         const pPrice = p.price || 0;
         const pCurrent = p.currentPrice || pPrice;
 
@@ -74,27 +71,22 @@ function render() {
     }).join('');
 }
 
-// دالة حذف منتج
-function deleteProduct(i) {
-    if(confirm("حذف؟")) { products.splice(i, 1); save(); render(); }
-}
-
-// دالة كود الخصم
+// حذف وكوبونات
+function deleteProduct(i) { if(confirm("حذف؟")) { products.splice(i, 1); save(); render(); } }
 function addCoupon() {
     const code = document.getElementById('c-code').value;
     const pct = parseFloat(document.getElementById('c-pct').value);
     if(code && pct) { coupons[code] = pct; save(); alert("تم حفظ الكود"); }
 }
-
 function applyCoupon(i) {
-    let code = prompt("أدخل الكود:");
+    let code = prompt("أدخل كود الخصم:");
     if(coupons[code] && !usedCoupons[products[i].id]) {
         products[i].currentPrice *= (1 - coupons[code]/100);
         products[i].hasDiscount = true;
         usedCoupons[products[i].id] = true;
         save(); render();
-    }
+    } else { alert("الكود غير صالح أو تم استخدامه"); }
 }
 
-// تشغيل عند التحميل
-window.onload = render;
+// تشغيل العرض عند فتح الصفحة
+window.addEventListener('DOMContentLoaded', render);
