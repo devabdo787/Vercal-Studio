@@ -16,12 +16,13 @@ export default async function handler(req, res) {
         });
         const tokenData = await tokenRes.json();
 
-        // البوت يطلب بياناتك من السيرفر للتأكد من الرتبة
+        // سؤال البوت عن رتبة المستخدم في السيرفر
         const memberRes = await fetch(`https://discord.com/api/guilds/${process.env.GUILD_ID}/members/${tokenData.user_id}`, {
             headers: { Authorization: `Bot ${process.env.BOT_TOKEN}` },
         });
         const memberData = await memberRes.json();
         
+        // التحقق من وجود ROLE_ID في قائمة رتب المستخدم
         const hasRole = memberData.roles && memberData.roles.includes(process.env.ROLE_ID);
         res.status(200).json({ hasRole: !!hasRole });
     } catch (err) { res.status(500).json({ hasRole: false }); }
