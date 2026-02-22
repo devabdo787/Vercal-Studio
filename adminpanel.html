@@ -2,43 +2,72 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>لوحة التحكم | Vercal</title>
+    <title>لوحة الإدارة | Vercal Studio</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body style="background: #000; color: #fff; font-family: 'Cairo'; padding: 20px;">
 
-    <div id="login-section" style="text-align: center; margin-top: 100px;">
-        <h2>🔐 تسجيل دخول الإدارة</h2>
-        <a href="https://discord.com/oauth2/authorize?client_id=1474893422845231177&response_type=code&redirect_uri=https%3A%2F%2Fvercal-studio.vercel.app%2Fapi%2Fauth&scope=identify+guilds.members.read" 
-           style="background: #5865F2; color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold;">
-            Login with Discord
-        </a>
-    </div>
+    <div id="status-msg" style="text-align: center; margin-top: 50px; font-size: 1.2rem;">جاري التحقق من صلاحياتك...</div>
 
     <div id="admin-content" style="display: none; max-width: 600px; margin: 0 auto;">
-        <h2 style="text-align: center; color: #5865F2;">لوحة الإدارة</h2>
-        <div class="admin-box" style="background: #111; padding: 20px; border-radius: 10px; border: 1px solid #222;">
-            <input type="text" id="p-img" placeholder="رابط الصورة">
+        <h2 style="text-align: center; color: #5865F2; margin-bottom: 30px;">🛠️ إدارة المنتجات</h2>
+        
+        <div style="background: #111; padding: 25px; border-radius: 12px; border: 1px solid #222;">
+            <input type="text" id="p-img" placeholder="رابط صورة المنتج">
             <input type="text" id="p-name" placeholder="اسم المنتج">
-            <textarea id="p-desc" placeholder="وصف المنتج"></textarea>
+            <textarea id="p-desc" placeholder="وصف المنتج" style="height: 80px;"></textarea>
+            
             <div style="display: flex; gap: 10px;">
-                <input type="text" id="p-price" placeholder="السعر">
+                <input type="text" id="p-price" placeholder="السعر (أرقام فقط)">
                 <input type="text" id="p-method" placeholder="طريقة الدفع (مثلاً Credit)">
             </div>
-            <button onclick="addProduct()" style="width: 100%; padding: 10px; margin-top: 10px; background: #00ff00; border: none; font-weight: bold; cursor: pointer;">إضافة المنتج</button>
+            
+            <button onclick="addProduct()" style="width: 100%; padding: 12px; margin-top: 20px; background: #5865F2; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">نشر المنتج الآن</button>
+        </div>
+        
+        <div style="text-align: center; margin-top: 20px;">
+            <button onclick="window.location.href='shop.html'" style="background: #333; color: #eee; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">ذهاب للمتجر</button>
         </div>
     </div>
 
-    <script src="script.js"></script>
     <script>
-        // هذا السكربت هو اللي بيرجع نظام تسجيل الدخول للعمل
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('auth') === 'success' || sessionStorage.getItem('isAdmin') === 'true') {
-            document.getElementById('login-section').style.display = 'none';
-            document.getElementById('admin-content').style.display = 'block';
-            sessionStorage.setItem('isAdmin', 'true');
+        const CLIENT_ID = "1474893422845231177";
+        const GUILD_ID = "1328006132043681812"; // سيرفرك
+        const REQUIRED_ROLE_ID = "1328006456208588820"; // رتبة الإدارة
+
+        async function checkAuth() {
+            const status = document.getElementById('status-msg');
+            const urlParams = new URLSearchParams(window.location.search);
+            const code = urlParams.get('code');
+
+            if (!code && !sessionStorage.getItem('access_token')) {
+                window.location.href = `https://discord.com/oauth2/authorize?client_id=${CLIENT_ID}&response_type=code&redirect_uri=${encodeURIComponent(window.location.href.split('?')[0])}&scope=identify+guilds.members.read`;
+                return;
+            }
+
+            try {
+                // الكود ده بيكلم الـ API اللي عملناه سوا عشان يشوف الرتبة
+                const token = sessionStorage.getItem('access_token') || code;
+                const response = await fetch(`https://vercal-studio.vercel.app/api/auth?code=${token}`);
+                const data = await response.json();
+
+                if (data.hasRole) {
+                    status.style.display = 'none';
+                    document.getElementById('admin-content').style.display = 'block';
+                    sessionStorage.setItem('isAdmin', 'true');
+                    sessionStorage.setItem('access_token', data.token);
+                } else {
+                    status.innerHTML = "❌ خطأ: ليس لديك رتبة الإدارة المطلوبة.";
+                    status.style.color = "red";
+                }
+            } catch (err) {
+                status.innerHTML = "⚠️ فشل التحقق، حاول تسجيل الدخول مرة أخرى.";
+            }
         }
+
+        window.onload = checkAuth;
     </script>
+    <script src="script.js"></script>
 </body>
 </html>
