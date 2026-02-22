@@ -7,19 +7,16 @@
         body { background: #000; color: #fff; font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
         .login-box { background: #0b0b0b; padding: 40px; border: 1px solid #1a1a1a; text-align: center; border-radius: 8px; width: 400px; }
         .btn-discord { background: #5865F2; color: white; padding: 15px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 1.1rem; text-decoration: none; display: block; margin-top: 25px; width: 100%; }
-        .btn-discord:hover { background: #4752c4; }
         .admin-form { display: none; background: #111; padding: 25px; border-radius: 10px; width: 450px; border: 1px solid #222; }
         input, textarea { width: 100%; padding: 12px; margin: 10px 0; background: #000; border: 1px solid #333; color: #fff; border-radius: 5px; box-sizing: border-box; }
-        h2 { margin-bottom: 5px; }
-        p { color: #aaa; font-size: 0.9rem; }
     </style>
 </head>
 <body>
 
     <div id="login-area" class="login-box">
         <h2>منطقة الإدارة المحمية</h2>
-        <p>يجب تسجيل الدخول عبر ديسكورد للتحقق من صلاحياتك</p>
-        <button onclick="startAuth()" class="btn-discord">تسجيل الدخول بالديسكورد</button>
+        <p style="color:#aaa;">يجب تسجيل الدخول عبر ديسكورد للتحقق من صلاحياتك</p>
+        <button onclick="startAuth()" class="btn-discord" id="main-btn">تسجيل الدخول بالديسكورد</button>
         <div id="loading-msg" style="margin-top: 15px; color: #5865F2; display: none;">جاري فحص رتبتك...</div>
     </div>
 
@@ -29,10 +26,10 @@
         <input type="text" id="p-name" placeholder="اسم المنتج">
         <textarea id="p-desc" rows="3" placeholder="وصف المنتج"></textarea>
         <div style="display: flex; gap: 10px;">
-            <input type="text" id="p-price" placeholder="السعر (مثلاً: 50)">
-            <input type="text" id="p-method" placeholder="العملة (مثلاً: سوا)">
+            <input type="text" id="p-price" placeholder="السعر">
+            <input type="text" id="p-method" placeholder="العملة (سوا، USDT..)">
         </div>
-        <button onclick="addProduct()" style="width: 100%; background: #5865F2; color: white; border: none; padding: 15px; cursor: pointer; font-weight: bold; border-radius: 5px; margin-top: 10px;">نشر المنتج</button>
+        <button onclick="addProduct()" style="width: 100%; background: #5865F2; color: white; border: none; padding: 15px; cursor: pointer; font-weight: bold; border-radius: 5px;">نشر المنتج</button>
     </div>
 
     <script src="script.js"></script>
@@ -40,17 +37,15 @@
         const CLIENT_ID = "1474893422845231177";
         const REDIRECT_URI = encodeURIComponent("https://vercal-studio.vercel.app/adminpanel.html");
 
-        // الدخول اليدوي لما تدوس على الزرار
         function startAuth() {
             window.location.href = `https://discord.com/oauth2/authorize?client_id=${CLIENT_ID}&response_type=code&redirect_uri=${REDIRECT_URI}&scope=identify+guilds.members.read`;
         }
 
-        async function handleCallback() {
+        async function handle() {
             const code = new URLSearchParams(window.location.search).get('code');
             if (!code) return;
 
-            // إخفاء الزرار وإظهار كلمة جاري الفحص
-            document.querySelector('.btn-discord').style.display = 'none';
+            document.getElementById('main-btn').style.display = 'none';
             document.getElementById('loading-msg').style.display = 'block';
 
             try {
@@ -63,15 +58,16 @@
                     sessionStorage.setItem('isAdmin', 'true');
                     window.history.replaceState({}, document.title, "adminpanel.html");
                 } else {
-                    alert("❌ خطأ: حسابك لا يمتلك رتبة الإدارة في السيرفر.");
+                    alert("⚠️ معندكش رتبة الأدمن في السيرفر");
                     window.location.href = 'index.html';
                 }
             } catch (e) {
-                alert("⚠️ حدث خطأ أثناء الاتصال بالبوت.");
-                location.reload();
+                alert("❌ فشل الاتصال بالبوت، تأكد من إعدادات Vercel");
+                document.getElementById('main-btn').style.display = 'block';
+                document.getElementById('loading-msg').style.display = 'none';
             }
         }
-        window.onload = handleCallback;
+        window.onload = handle;
     </script>
 </body>
 </html>
