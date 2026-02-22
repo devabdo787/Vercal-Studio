@@ -12,7 +12,7 @@ function addProduct() {
     const desc = document.getElementById('p-desc')?.value;
     const img = document.getElementById('p-img')?.value;
 
-    if (!name || !price) return alert("البيانات ناقصة!");
+    if (!name || !price) return alert("أكمل البيانات!");
 
     products.push({ id: Date.now(), name, price, method, desc, img });
     save();
@@ -31,15 +31,15 @@ function render() {
                 <h3>${p.name}</h3>
                 <p>${p.desc}</p>
                 <div class="price-tag">
-                    <span style="color:#00ff00;">${p.price} ${p.method}</span>
+                    <span style="color:#00ff00; font-weight:bold;">${p.price} ${p.method}</span>
                 </div>
-                <a href="https://discord.gg/3tDGtJNSKE" class="btn-buy">شراء الآن</a>
+                <a href="https://discord.gg/3tDGtJNSKE" target="_blank" class="btn-buy">شراء الآن</a>
             </div>
         </div>`).join('');
 }
 
 function deleteProduct(i) {
-    if(confirm("حذف؟")) { products.splice(i, 1); save(); render(); }
+    if(confirm("حذف المنتج؟")) { products.splice(i, 1); save(); render(); }
 }
 
-window.onload = render;
+window.addEventListener('DOMContentLoaded', render);
