@@ -2,114 +2,73 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة الإدارة | Vercal Studio</title>
+    <title>لوحة الإدارة | Vercal</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #000; color: #fff; font-family: 'Cairo', sans-serif; margin: 0; padding: 20px; }
         .error-card { background: #1a0a0a; border: 2px solid #ff4d4d; padding: 30px; border-radius: 15px; text-align: center; max-width: 400px; margin: 100px auto; display: none; }
         .error-icon { font-size: 50px; color: #ff4d4d; margin-bottom: 15px; }
         .loading-text { font-size: 1.2rem; text-align: center; margin-top: 100px; color: #5865F2; }
-        .admin-container { max-width: 700px; margin: 50px auto; display: none; }
-        .input-group { background: #111; padding: 25px; border-radius: 12px; border: 1px solid #222; }
-        input, textarea { width: 100%; padding: 12px; margin: 10px 0; background: #000; border: 1px solid #333; color: #fff; border-radius: 5px; box-sizing: border-box; }
-        button { width: 100%; padding: 15px; background: #5865F2; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 1rem; margin-top: 10px; }
-        button:hover { background: #4752c4; }
     </style>
 </head>
-<body>
+<body style="background: #000; color: #fff; font-family: 'Cairo';">
 
-    <div id="loading" class="loading-text">جاري التحقق من صلاحياتك في ديسكورد...</div>
+    <div id="loading" class="loading-text">جاري التحقق من رتبتك عبر البوت...</div>
 
     <div id="error-box" class="error-card">
         <div class="error-icon">❌</div>
-        <h2 style="color: #ff4d4d;">فشل التحقق!</h2>
-        <p>عذراً، ليس لديك الصلاحيات الكافية لدخول هذه اللوحة. تأكد من وجود رتبة الإدارة في حسابك.</p>
-        <button onclick="window.location.href='index.html'" style="background:#ff4d4d;">العودة للرئيسية</button>
+        <h2 style="color: #ff4d4d;">فشل التحقق من صلاحياتك!</h2>
+        <p>البوت لم يجد رتبة الإدارة في حسابك. سيتم تحويلك للرئيسية...</p>
     </div>
 
-    <div id="admin-content" class="admin-container">
-        <h2 style="text-align: center; color: #5865F2; margin-bottom: 30px;">🛠️ إدارة منتجات Vercal</h2>
-        
-        <div class="input-group">
-            <label>رابط صورة المنتج:</label>
-            <input type="text" id="p-img" placeholder="https://example.com/image.png">
-            
-            <label>اسم المنتج:</label>
-            <input type="text" id="p-name" placeholder="مثلاً: نيترو ديسكورد">
-            
-            <label>وصف المنتج:</label>
-            <textarea id="p-desc" placeholder="اكتب تفاصيل المنتج هنا..."></textarea>
-            
+    <div id="admin-content" style="display: none; max-width: 600px; margin: 50px auto;">
+        <h2 style="text-align: center;">🛠️ لوحة الإدارة</h2>
+        <div style="background: #111; padding: 20px; border-radius: 10px; border: 1px solid #222;">
+            <input type="text" id="p-img" placeholder="رابط الصورة">
+            <input type="text" id="p-name" placeholder="اسم المنتج">
+            <textarea id="p-desc" placeholder="وصف المنتج"></textarea>
             <div style="display: flex; gap: 10px;">
-                <div style="flex: 1;">
-                    <label>السعر:</label>
-                    <input type="text" id="p-price" placeholder="مثلاً: 50">
-                </div>
-                <div style="flex: 1;">
-                    <label>طريقة الدفع:</label>
-                    <input type="text" id="p-method" placeholder="مثلاً: Credit أو USDT">
-                </div>
+                <input type="text" id="p-price" placeholder="السعر">
+                <input type="text" id="p-method" placeholder="طريقة الدفع (مثلاً Credit)">
             </div>
-            
-            <button onclick="addProduct()">نشر المنتج في المتجر</button>
-        </div>
-
-        <div class="input-group" style="margin-top: 30px;">
-            <h3 style="color: #f1c40f; margin-top: 0;">🎟️ إضافة كود خصم</h3>
-            <input type="text" id="c-code" placeholder="كود الخصم (مثلاً: VERCAL10)">
-            <input type="number" id="c-pct" placeholder="نسبة الخصم % (مثلاً: 10)">
-            <button onclick="addCoupon()" style="background: #f1c40f; color: black;">تفعيل كود الخصم</button>
+            <button onclick="addProduct()" style="width: 100%; padding: 10px; background: #5865F2; color: white; border: none; cursor: pointer; font-weight: bold; margin-top: 10px;">نشر المنتج</button>
         </div>
     </div>
 
     <script src="script.js"></script>
     <script>
         const CLIENT_ID = "1474893422845231177";
-        // تأكد أن هذا الرابط مطابق تماماً لما وضعته في Discord Developer Portal
         const REDIRECT_URI = encodeURIComponent("https://vercal-studio.vercel.app/adminpanel.html");
 
         async function checkAuth() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const code = urlParams.get('code');
-            const loading = document.getElementById('loading');
-            const errorBox = document.getElementById('error-box');
-            const content = document.getElementById('admin-content');
+            const params = new URLSearchParams(window.location.search);
+            const code = params.get('code');
 
-            // 1. لو مفيش كود ولا توكن، ابعته للديسكورد
-            if (!code && !sessionStorage.getItem('access_token')) {
+            if (!code) {
+                // الربط بالبوت مع الـ Scopes المطلوبة
                 window.location.href = `https://discord.com/oauth2/authorize?client_id=${CLIENT_ID}&response_type=code&redirect_uri=${REDIRECT_URI}&scope=identify+guilds.members.read`;
                 return;
             }
 
             try {
-                // 2. التحقق من الكود عبر الـ API في Vercel
-                const token = sessionStorage.getItem('access_token') || code;
-                const response = await fetch(`https://vercal-studio.vercel.app/api/auth?code=${token}`);
+                // بنكلم الـ API اللي رابطينه بالبوت في Vercel
+                const response = await fetch(`/api/auth?code=${code}`);
                 const data = await response.json();
 
-                loading.style.display = 'none';
+                document.getElementById('loading').style.display = 'none';
 
                 if (data.hasRole) {
-                    // 3. نجاح التحقق: اظهر اللوحة واحفظ الحالة
-                    content.style.display = 'block';
+                    document.getElementById('admin-content').style.display = 'block';
                     sessionStorage.setItem('isAdmin', 'true');
-                    sessionStorage.setItem('access_token', data.token || token);
-                    // تنظيف الرابط من الـ code للجماليات
                     window.history.replaceState({}, document.title, "adminpanel.html");
                 } else {
-                    // 4. فشل التحقق: اظهر الـ X الحمراء
-                    errorBox.style.display = 'block';
-                    setTimeout(() => { window.location.href = 'index.html'; }, 5000);
+                    document.getElementById('error-box').style.display = 'block';
+                    setTimeout(() => { window.location.href = 'index.html'; }, 4000);
                 }
             } catch (err) {
-                loading.style.display = 'none';
-                errorBox.style.display = 'block';
-                console.error("Auth Fail:", err);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('error-box').style.display = 'block';
             }
         }
-
         window.onload = checkAuth;
     </script>
 </body>
