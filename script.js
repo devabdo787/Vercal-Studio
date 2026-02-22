@@ -1,9 +1,7 @@
 let products = JSON.parse(localStorage.getItem('v_products')) || [];
 let isAdmin = sessionStorage.getItem('isAdmin') === 'true';
 
-function save() {
-    localStorage.setItem('v_products', JSON.stringify(products));
-}
+function save() { localStorage.setItem('v_products', JSON.stringify(products)); }
 
 function addProduct() {
     const name = document.getElementById('p-name')?.value;
@@ -12,7 +10,7 @@ function addProduct() {
     const desc = document.getElementById('p-desc')?.value;
     const img = document.getElementById('p-img')?.value;
 
-    if (!name || !price) return alert("اكتب الاسم والسعر!");
+    if (!name || !price) return alert("البيانات ناقصة!");
 
     products.push({ id: Date.now(), name, price, method, desc, img });
     save();
@@ -31,9 +29,9 @@ function render() {
                 <h3>${p.name}</h3>
                 <p>${p.desc}</p>
                 <div class="price-tag">
-                    <span style="color:#00ff00;">${p.price} ${p.method}</span>
+                    <span style="color:#00ff00; font-weight:bold;">${p.price} ${p.method}</span>
                 </div>
-                <a href="https://discord.gg/3tDGtJNSKE" class="btn-buy">شراء الآن</a>
+                <a href="https://discord.gg/3tDGtJNSKE" class="btn-buy" target="_blank">شراء الآن</a>
             </div>
         </div>`).join('');
 }
@@ -41,5 +39,4 @@ function render() {
 function deleteProduct(i) {
     if(confirm("حذف؟")) { products.splice(i, 1); save(); render(); }
 }
-
 window.onload = render;
