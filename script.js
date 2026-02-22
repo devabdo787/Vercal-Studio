@@ -12,10 +12,11 @@ function addProduct() {
     const desc = document.getElementById('p-desc')?.value;
     const img = document.getElementById('p-img')?.value;
 
-    if (!name || !price) return alert("أكمل البيانات!");
+    if (!name || !price) return alert("يرجى ملء الاسم والسعر!");
 
     products.push({ id: Date.now(), name, price, method, desc, img });
     save();
+    alert("✅ تم إضافة المنتج!");
     location.reload();
 }
 
@@ -24,22 +25,22 @@ function render() {
     if (!list) return;
 
     list.innerHTML = products.map((p, i) => `
-        <div class="card">
-            ${isAdmin ? `<button class="delete-btn" onclick="deleteProduct(${i})">×</button>` : ''}
-            <img src="${p.img || ''}">
+        <div class="card" style="position:relative; background:#111; border-radius:10px; padding:15px; border:1px solid #222;">
+            ${isAdmin ? `<button onclick="deleteProduct(${i})" style="position:absolute; top:10px; right:10px; background:red; color:white; border:none; cursor:pointer; border-radius:5px; padding:5px 10px;">×</button>` : ''}
+            <img src="${p.img || ''}" style="width:100%; height:180px; object-fit:cover; border-radius:5px;">
             <div class="card-content">
-                <h3>${p.name}</h3>
-                <p>${p.desc}</p>
-                <div class="price-tag">
-                    <span style="color:#00ff00; font-weight:bold;">${p.price} ${p.method}</span>
+                <h3 style="margin:10px 0;">${p.name}</h3>
+                <p style="color:#aaa; font-size:0.9rem;">${p.desc}</p>
+                <div class="price-tag" style="margin:15px 0;">
+                    <span style="color:#00ff00; font-weight:bold; font-size:1.2rem;">${p.price} ${p.method}</span>
                 </div>
-                <a href="https://discord.gg/3tDGtJNSKE" target="_blank" class="btn-buy">شراء الآن</a>
+                <a href="https://discord.gg/3tDGtJNSKE" target="_blank" style="display:block; text-align:center; background:#5865F2; color:white; padding:10px; text-decoration:none; border-radius:5px; font-weight:bold;">شراء الآن</a>
             </div>
         </div>`).join('');
 }
 
 function deleteProduct(i) {
-    if(confirm("حذف المنتج؟")) { products.splice(i, 1); save(); render(); }
+    if(confirm("هل أنت متأكد من الحذف؟")) { products.splice(i, 1); save(); render(); }
 }
 
 window.addEventListener('DOMContentLoaded', render);
