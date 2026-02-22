@@ -3,44 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vercal Studio | Store</title>
+    <title>Vercal Studio | المتجر الرسمي</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* تنسيقات سريعة لضمان عمل المتجر بشكل صحيح */
+        html { scroll-behavior: smooth; } /* لجعل التنقل ناعم عند الضغط على المتجر */
+        .price-tag { margin: 15px 0; font-weight: bold; font-size: 1.1rem; }
+        .new-price { color: #00ff00; margin-right: 5px; }
+        .old-price { color: #ff4d4d; text-decoration: line-through; font-size: 0.85rem; opacity: 0.7; }
+        .delete-btn { position: absolute; top: 10px; right: 10px; background: red; color: white; border: none; border-radius: 50%; width: 25px; height: 25px; cursor: pointer; z-index: 10; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 20px; }
+        .card { background: #111; border: 1px solid #222; border-radius: 12px; overflow: hidden; position: relative; transition: 0.3s; }
+        .card:hover { transform: translateY(-5px); border-color: #5865F2; }
+        .card img { width: 100%; height: 200px; object-fit: cover; }
+        .card-content { padding: 15px; }
+    </style>
 </head>
-<body>
+<body style="background-color: #000; color: #fff; font-family: 'Cairo', sans-serif; margin: 0;">
 
-    <nav class="navbar">
-        <div class="nav-links">
-            <a href="#" onclick="showSection('home')">الرئيسية</a>
-            <a href="#" onclick="showSection('store')">المتجر</a>
-            <a href="adminpanel.html">الإدارة</a>
-        </div>
-        <div class="brand">VERCAL STUDIO</div>
-    </nav>
+    <header style="background: rgba(0,0,0,0.9); padding: 20px; position: fixed; width: 100%; top: 0; z-index: 1000; border-bottom: 1px solid #222;">
+        <nav style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
+            <div class="logo" style="font-size: 1.5rem; font-weight: bold; color: #5865F2;">Vercal Studio</div>
+            <ul style="list-style: none; display: flex; gap: 25px; margin: 0; padding: 0;">
+                <li><a href="index.html" style="color: #fff; text-decoration: none; transition: 0.3s;">الرئيسية</a></li>
+                <li><a href="#shop" style="color: #fff; text-decoration: none; transition: 0.3s;">المتجر</a></li>
+                <li><a href="adminpanel.html" style="color: #fff; text-decoration: none; transition: 0.3s;">الإدارة</a></li>
+            </ul>
+        </nav>
+    </header>
 
-    <section id="home" class="section active">
-        <div class="hero">
-            <h1>VERCAL STUDIO</h1>
-            <p>نصنع لك التجربة البرمجية التي تستحقها</p>
-            <div class="hero-btns">
-                <button class="btn-main" onclick="showSection('store')">تصفح المنتجات</button>
-                <a href="https://discord.gg/3tDGtJNSKE" target="_blank" class="btn-discord">
-                    <i class="fab fa-discord"></i> انضم إلينا الآن
-                </a>
-            </div>
+    <section style="height: 60vh; display: flex; align-items: center; justify-content: center; text-align: center; background: linear-gradient(to bottom, #000, #111); margin-top: 60px;">
+        <div>
+            <h1 style="font-size: 3rem; margin-bottom: 10px;">Vercal Studio</h1>
+            <p style="color: #aaa; font-size: 1.2rem;">أفضل الخدمات بأفضل الأسعار وبطرق دفع مرنة</p>
+            <a href="#shop" style="background: #5865F2; color: #fff; padding: 12px 30px; border-radius: 5px; text-decoration: none; display: inline-block; margin-top: 20px; font-weight: bold;">تصفح المنتجات</a>
         </div>
     </section>
 
-    <section id="store" class="section">
-        <h2 class="title">المتجر الحصري</h2>
-        <div id="product-list" class="grid"></div>
+    <section id="shop" style="padding: 80px 20px; max-width: 1200px; margin: 0 auto;">
+        <h2 style="text-align: center; margin-bottom: 40px; font-size: 2rem; border-bottom: 2px solid #5865F2; display: table; margin-left: auto; margin-right: auto; padding-bottom: 10px;">
+            🛒 معرض المنتجات
+        </h2>
+
+        <div id="product-list" class="product-grid">
+            <p style="text-align: center; width: 100%; color: #555;">جاري تحميل المنتجات...</p>
+        </div>
     </section>
+
+    <footer style="background: #0a0a0a; padding: 40px 20px; text-align: center; border-top: 1px solid #222;">
+        <p>© 2026 Vercal Studio. جميع الحقوق محفوظة.</p>
+        <div style="margin-top: 15px;">
+            <a href="https://discord.gg/3tDGtJNSKE" target="_blank" style="color: #5865F2; text-decoration: none;">انضم لسيرفر الديسكورد</a>
+        </div>
+    </footer>
 
     <script src="script.js"></script>
-    <script>
-        // تشغيل العرض فور فتح الصفحة
-        window.onload = () => render();
-    </script>
 </body>
 </html>
