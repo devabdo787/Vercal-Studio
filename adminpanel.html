@@ -2,23 +2,34 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>لوحة الإدارة</title>
-    <link rel="stylesheet" href="style.css">
+    <title>منطقة الإدارة المحمية</title>
+    <style>
+        body { background: #000; color: #fff; font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        .login-box { background: #0b0b0b; padding: 40px; border: 1px solid #1a1a1a; text-align: center; border-radius: 5px; }
+        .btn-discord { background: #5865F2; color: white; padding: 15px 30px; border: none; border-radius: 3px; cursor: pointer; font-weight: bold; font-size: 1.1rem; text-decoration: none; display: inline-block; margin-top: 20px; }
+        .admin-form { display: none; background: #111; padding: 25px; border-radius: 10px; width: 400px; text-align: right; }
+        input, textarea { width: 100%; padding: 10px; margin: 10px 0; background: #000; border: 1px solid #333; color: #fff; box-sizing: border-box; }
+    </style>
 </head>
-<body style="background:#000; color:#fff; text-align:center;">
+<body>
 
-    <div id="loading" style="margin-top:100px;">جاري التحقق...</div>
+    <div id="login-area" class="login-box">
+        <h2 style="margin: 0;">منطقة الإدارة المحمية</h2>
+        <p style="color: #ccc; margin: 15px 0;">يجب تسجيل الدخول عبر ديسكورد للتحقق من صلاحياتك</p>
+        <button id="auth-btn" onclick="startAuth()" class="btn-discord">تسجيل الدخول بالديسكورد</button>
+        <div id="status-msg" style="margin-top: 15px; color: #5865F2; display: none;">جاري التحقق...</div>
+    </div>
 
-    <div id="admin-content" style="display:none; max-width:600px; margin:50px auto; background:#111; padding:20px; border-radius:10px;">
-        <h2>🛠️ إضافة منتج</h2>
+    <div id="admin-content" class="admin-form">
+        <h2 style="text-align: center;">🛠️ إضافة منتج جديد</h2>
         <input type="text" id="p-img" placeholder="رابط الصورة">
         <input type="text" id="p-name" placeholder="اسم المنتج">
         <textarea id="p-desc" placeholder="وصف المنتج"></textarea>
-        <div style="display:flex; gap:10px;">
+        <div style="display: flex; gap: 10px;">
             <input type="text" id="p-price" placeholder="السعر">
-            <input type="text" id="p-method" placeholder="العملة/الطريقة (مثل سوا، USDT)">
+            <input type="text" id="p-method" placeholder="طريقة الدفع (سوا، USDT..)">
         </div>
-        <button onclick="addProduct()" style="width:100%; padding:10px; background:#5865F2; color:#fff; border:none; margin-top:10px; cursor:pointer;">نشر</button>
+        <button onclick="addProduct()" style="width: 100%; background: #5865F2; color: white; border: none; padding: 12px; cursor: pointer; font-weight: bold;">نشر المنتج</button>
     </div>
 
     <script src="script.js"></script>
@@ -26,24 +37,33 @@
         const CLIENT_ID = "1474893422845231177";
         const REDIRECT_URI = encodeURIComponent("https://vercal-studio.vercel.app/adminpanel.html");
 
+        function startAuth() {
+            window.location.href = `https://discord.com/oauth2/authorize?client_id=${CLIENT_ID}&response_type=code&redirect_uri=${REDIRECT_URI}&scope=identify+guilds.members.read`;
+        }
+
         async function check() {
             const code = new URLSearchParams(window.location.search).get('code');
-            if (!code) {
-                window.location.href = `https://discord.com/oauth2/authorize?client_id=${CLIENT_ID}&response_type=code&redirect_uri=${REDIRECT_URI}&scope=identify+guilds.members.read`;
-                return;
-            }
+            if (!code) return;
+
+            document.getElementById('auth-btn').style.display = 'none';
+            document.getElementById('status-msg').style.display = 'block';
+
             try {
                 const res = await fetch(`/api/auth?code=${code}`);
                 const data = await res.json();
+
                 if (data.hasRole) {
-                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('login-area').style.display = 'none';
                     document.getElementById('admin-content').style.display = 'block';
                     sessionStorage.setItem('isAdmin', 'true');
+                    window.history.replaceState({}, document.title, "adminpanel.html");
                 } else {
-                    alert("ليس لديك صلاحية"); // رجعت للتنبيه العادي بتاع زمان
+                    alert("⚠️ ليس لديك رتبة الإدارة!");
                     window.location.href = 'index.html';
                 }
-            } catch (e) { location.reload(); }
+            } catch (e) {
+                alert("خطأ في الاتصال بالسيرفر");
+            }
         }
         window.onload = check;
     </script>
